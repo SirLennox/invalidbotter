@@ -12,7 +12,7 @@ export const AutoRefresh: Module = {
     author: "SirLennox",
     description: "Auto-Refresh plugins, commands & themes",
     loop: undefined,
-    loopInterval: 20,
+    loopInterval: 1000000,
     name: "AutoRefresh",
     toggled: true,
     version: "1.0",

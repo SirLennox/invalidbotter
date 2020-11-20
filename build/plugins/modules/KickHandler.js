@@ -11,7 +11,7 @@ exports.KickHandler = {
     author: "SirLennox",
     description: "A kick handler to notify if you got kicked from a server",
     loop: undefined,
-    loopInterval: 20,
+    loopInterval: 1000000,
     name: "KickHandler",
     toggled: true,
     version: "1.0",

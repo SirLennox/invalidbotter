@@ -85,6 +85,13 @@ class InvalidBotter {
         this.gui.chatBox.setScrollPerc(100);
         this.gui.renderScreen();
     }
+    getBotByName(name) {
+        for (let bot of this.getBotsOnServer()) {
+            if (bot._client.username.toUpperCase() === name.toUpperCase()) {
+                return bot;
+            }
+        }
+    }
     getColorOf(loglevel) {
         for (let text of this.messageColors.colors) {
             if (text.name.toString().toUpperCase() === loglevel.toUpperCase()) {

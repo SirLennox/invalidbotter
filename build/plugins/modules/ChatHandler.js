@@ -5,7 +5,7 @@ exports.ChatHandler = {
     onBotSpawn(bot, botter) {
         botter.addListenerToBot(bot, "message", (message, type) => {
             if (type !== "game_info") {
-                botter.log(message, "CHAT", bot);
+                botter.log(message /*.toAnsi({})*/, "CHAT", bot);
             }
         }, "CHAT_HANDLER");
     },
@@ -25,7 +25,7 @@ exports.ChatHandler = {
         for (let bot of botter.getBotsOnServer()) {
             botter.addListenerToBot(bot, "message", (message, type) => {
                 if (type !== "game_info") {
-                    botter.log(message, "CHAT", bot);
+                    botter.log(message /*.toAnsi()*/, "CHAT", bot);
                 }
             }, "CHAT_HANDLER");
         }

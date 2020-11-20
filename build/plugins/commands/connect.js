@@ -11,12 +11,12 @@ exports.Connect = {
     description: "Connect to a server with one account",
     version: "1.0",
     onCommand(args, invalidbotter) {
-        if (args.length == 2) {
+        if (args.length == 2 || args.length == 3) {
             let ipSplit = args[0].split(":");
             let ip;
             let port = 25565;
             if (ipSplit.length == 0) {
-                invalidbotter.sendUsage("<ip:port> <email(:password)>");
+                invalidbotter.sendUsage("<ip:port> <email(:password)> [version]");
                 return;
             }
             ip = ipSplit[0];
@@ -26,11 +26,15 @@ exports.Connect = {
             if (ip && port) {
                 let email = undefined;
                 let pwd = undefined;
+                let version = false;
                 let part = args[1];
                 let splitCredentials = part.split(":");
                 if (splitCredentials.length == 0) {
-                    invalidbotter.sendUsage("<ip:port> <email(:password)>");
+                    invalidbotter.sendUsage("<ip:port> <email(:password)> [version]");
                     return;
+                }
+                if (args.length == 3) {
+                    version = args[2];
                 }
                 email = splitCredentials[0];
                 if (splitCredentials.length == 1) {
@@ -38,7 +42,8 @@ exports.Connect = {
                     invalidbotter.addBotWithDelay({
                         username: email,
                         host: ip,
-                        port: port
+                        port: port,
+                        version: version
                     }, true);
                 }
                 else {
@@ -48,16 +53,17 @@ exports.Connect = {
                         username: email,
                         password: pwd,
                         host: ip,
-                        port: port
+                        port: port,
+                        version: version
                     }, true);
                 }
             }
             else {
-                invalidbotter.sendUsage("<ip:port> <email(:password)>");
+                invalidbotter.sendUsage("<ip:port> <email(:password)> [version]");
             }
         }
         else {
-            invalidbotter.sendUsage("<ip:port> <email(:password)>");
+            invalidbotter.sendUsage("<ip:port> <email(:password)> [version]");
         }
     }
 };

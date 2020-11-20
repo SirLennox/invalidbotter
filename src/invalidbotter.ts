@@ -86,6 +86,14 @@ export default class InvalidBotter {
         this.gui.renderScreen();
     }
 
+    public getBotByName(name: string): Bot {
+        for(let bot of this.getBotsOnServer()) {
+            if(bot._client.username.toUpperCase() === name.toUpperCase()) {
+                return bot;
+            }
+        }
+    }
+
     public getColorOf(loglevel: string) {
         for(let text of this.messageColors.colors) {
             if(text.name.toString().toUpperCase() === loglevel.toUpperCase()) {
