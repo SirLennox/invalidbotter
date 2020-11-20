@@ -12,7 +12,7 @@ export const Dance: Module = {
     loop: undefined,
     loopInterval: 20,
     name: "Dance",
-    toggled: true,
+    toggled: false,
     version: "1.0",
     onDisable(botter: InvalidBotter): void {
         for(let bot of botter.getBotsOnServer()) {

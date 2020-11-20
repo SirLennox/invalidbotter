@@ -39,7 +39,7 @@ exports.PremiumBot = {
             let ip;
             let port = 25565;
             if (ipSplit.length == 0) {
-                invalidbotter.sendUsage("<ip:port> <accountList> [version]");
+                invalidbotter.sendUsage("pbot <ip:port> <accountList> [version]");
                 return;
             }
             ip = ipSplit[0];
@@ -80,11 +80,11 @@ exports.PremiumBot = {
                 }, 100);
             }
             else {
-                invalidbotter.sendUsage("<ip:port> <accountList> [version]");
+                invalidbotter.sendUsage("pbot <ip:port> <accountList> [version]");
             }
         }
         else {
-            invalidbotter.sendUsage("<ip:port> <accountList> [version]");
+            invalidbotter.sendUsage("pbot <ip:port> <accountList> [version]");
         }
     }
 };

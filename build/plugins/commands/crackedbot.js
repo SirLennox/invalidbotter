@@ -6,7 +6,8 @@ exports.CrackedBot = {
         "crackedbotter",
         "crackedbotserver",
         "cbotter",
-        "cbotserver"
+        "cbotserver",
+        "cbot"
     ],
     author: "SirLennox",
     command: "crackedbot",
@@ -18,7 +19,7 @@ exports.CrackedBot = {
             let ip;
             let port = 25565;
             if (ipSplit.length == 0) {
-                invalidbotter.sendUsage("<ip:port> <botCount> [version]");
+                invalidbotter.sendUsage("cbot <ip:port> <botCount> [version]");
                 return;
             }
             ip = ipSplit[0];
@@ -49,11 +50,11 @@ exports.CrackedBot = {
                 }, 100);
             }
             else {
-                invalidbotter.sendUsage("<ip:port> <botCount> [version]");
+                invalidbotter.sendUsage("cbot <ip:port> <botCount> [version]");
             }
         }
         else {
-            invalidbotter.sendUsage("<ip:port> <botCount> [version]");
+            invalidbotter.sendUsage("cbot <ip:port> <botCount> [version]");
         }
     }
 };

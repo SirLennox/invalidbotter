@@ -19,7 +19,8 @@
     "fs": "0.0.1-security",
     "minecraft-protocol": "^1.19.0",
     "mineflayer": "^2.34.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "prismarine-viewer": "^1.6.0"
   },
   "devDependencies": {
     "minecraft-protocol": "^1.19.0",

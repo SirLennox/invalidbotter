@@ -22,7 +22,7 @@ export const PremiumBot: Command = {
             let port: number = 25565;
 
             if(ipSplit.length == 0) {
-                invalidbotter.sendUsage("<ip:port> <accountList> [version]");
+                invalidbotter.sendUsage("pbot <ip:port> <accountList> [version]");
                 return;
             }
             ip = ipSplit[0];
@@ -67,10 +67,10 @@ export const PremiumBot: Command = {
                 }, 100);
 
             }else {
-                invalidbotter.sendUsage("<ip:port> <accountList> [version]");
+                invalidbotter.sendUsage("pbot <ip:port> <accountList> [version]");
             }
         }else {
-            invalidbotter.sendUsage("<ip:port> <accountList> [version]");
+            invalidbotter.sendUsage("pbot <ip:port> <accountList> [version]");
         }
     }
 

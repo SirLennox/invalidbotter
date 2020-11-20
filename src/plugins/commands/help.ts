@@ -39,16 +39,8 @@ export const Help: Command = {
             invalidbotter.writeInChatBox("-----------[{#00FF1C-fg}" + command.command + "{/}]-----------")
             invalidbotter.writeInChatBox("Name: {#00FF1C-fg}" + command.command + "{/}");
 
-            let aliasesStr: string = "";
-            for(let i = 0; i < command.aliases.length; i++) {
-                if(i === command.aliases.length - 1) {
-                    aliasesStr += command.aliases[i];
-                }else {
-                    aliasesStr += command.aliases[i] + ",";
-                }
-            }
-            if(aliasesStr != "") {
-                invalidbotter.writeInChatBox("Aliases: {#00FF1C-fg}" + aliasesStr + "{/}");
+            if(command.aliases.length > 0) {
+                invalidbotter.writeInChatBox("Aliases:{#00FF1C-fg}" + command.aliases.map((value, index, array) => " " + value)+ "{/}");
             }
             invalidbotter.writeInChatBox("Version: {#00FF1C-fg}" + command.version + "{/}");
             invalidbotter.writeInChatBox("Description: {#00FF1C-fg}" + command.description + "{/}");

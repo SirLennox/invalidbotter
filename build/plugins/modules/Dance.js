@@ -9,7 +9,7 @@ exports.Dance = {
     loop: undefined,
     loopInterval: 20,
     name: "Dance",
-    toggled: true,
+    toggled: false,
     version: "1.0",
     onDisable(botter) {
         for (let bot of botter.getBotsOnServer()) {
