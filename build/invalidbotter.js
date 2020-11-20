@@ -92,6 +92,13 @@ class InvalidBotter {
             }
         }
     }
+    getBotJSONObjectByName(name) {
+        for (let bot of this.bots) {
+            if (bot._client.username.toUpperCase() === name.toUpperCase() && bot.onServer) {
+                return bot;
+            }
+        }
+    }
     getColorOf(loglevel) {
         for (let text of this.messageColors.colors) {
             if (text.name.toString().toUpperCase() === loglevel.toUpperCase()) {

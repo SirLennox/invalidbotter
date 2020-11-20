@@ -21,11 +21,7 @@ export const Toggle: Command = {
             console.error("Bot not found!");
             return;
         }
-        mineflayerViewer(bot, { port: 3000 + index })
-        invalidbotter.log("Bot viewer started on: http://localhost:" + 3000 + index +"/", "SUCCESS", bot);
-        invalidbotter.addListenerToBot(bot, "kicked", () => {
-
-        }, "VIEWER_KICK_EVENT");
+        mineflayerViewer(bot, { port: 3000 + index });
         const path = [bot.entity.position.clone()]
         invalidbotter.addListenerToBot(bot, "move", () => {
             if (path[path.length - 1].distanceTo(bot.entity.position) > 1) {

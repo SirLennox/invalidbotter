@@ -20,9 +20,6 @@ exports.Toggle = {
             return;
         }
         mineflayerViewer(bot, { port: 3000 + index });
-        invalidbotter.log("Bot viewer started on: http://127.0.0.1:" + 3000 + index + "/", "SUCCESS", bot);
-        invalidbotter.addListenerToBot(bot, "kicked", () => {
-        }, "VIEWER_KICK_EVENT");
         const path = [bot.entity.position.clone()];
         invalidbotter.addListenerToBot(bot, "move", () => {
             if (path[path.length - 1].distanceTo(bot.entity.position) > 1) {

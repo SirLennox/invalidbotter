@@ -94,6 +94,14 @@ export default class InvalidBotter {
         }
     }
 
+    public getBotJSONObjectByName(name: string): any {
+        for(let bot of this.bots) {
+            if(bot._client.username.toUpperCase() === name.toUpperCase() && bot.onServer) {
+                return bot;
+            }
+        }
+    }
+
     public getColorOf(loglevel: string) {
         for(let text of this.messageColors.colors) {
             if(text.name.toString().toUpperCase() === loglevel.toUpperCase()) {
