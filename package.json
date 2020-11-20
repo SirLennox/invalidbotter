@@ -1,0 +1,28 @@
+{
+  "name": "invalidbotter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "run": "node build/main.js",
+    "start": "npm run build && npm run run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/blessed": "^0.1.17",
+    "@types/node": "^14.14.7",
+    "blessed": "^0.1.81",
+    "clipboardy": "^2.3.0",
+    "fs": "0.0.1-security",
+    "minecraft-protocol": "^1.19.0",
+    "mineflayer": "^2.34.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "minecraft-protocol": "^1.19.0",
+    "proxy-agent": "^4.0.0"
+  }
+}
