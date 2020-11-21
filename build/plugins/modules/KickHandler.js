@@ -2,12 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KickHandler = void 0;
 exports.KickHandler = {
-    onBotSpawn(bot, botter) {
-        botter.addListenerToBot(bot, "kicked", (reason, loggedIn) => {
-            botter.log(bot._client.username + " got kicked for: " + reason, "KICK", bot);
-            botter.removeBot(bot);
-        });
-    },
+    onBotSpawn(bot, botter) { },
     author: "SirLennox",
     description: "A kick handler to notify if you got kicked from a server",
     loop: undefined,

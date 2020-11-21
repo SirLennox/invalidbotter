@@ -50,6 +50,22 @@ class Gui {
             smartCSR: true,
             fullUnicode: true
         });
+        this.playerList = blessed.box({
+            left: "0%",
+            width: "15%",
+            height: "100%",
+            style: {
+                bg: this.backgroundColor,
+                fg: this.fontColor
+            },
+            border: {
+                type: "line",
+                fg: 1,
+                bg: 0
+            },
+            focusable: false,
+            draggable: true
+        });
         this.background = blessed.box({
             top: "0%",
             left: "0%",
@@ -58,7 +74,8 @@ class Gui {
             style: {
                 fg: this.fontColor,
                 bg: this.backgroundColor
-            }
+            },
+            focusable: false
         });
         this.inputBox = blessed.textbox({
             top: "95%",
@@ -69,7 +86,8 @@ class Gui {
                 fg: this.fontColor,
                 bg: this.inputBoxBackground
             },
-            inputOnFocus: true
+            inputOnFocus: true,
+            focusable: true
         });
         this.chatBox = blessed.box({
             top: "0%",
@@ -81,6 +99,7 @@ class Gui {
                 bg: this.chatBackground,
             },
             scrollable: true,
+            focusable: false,
             tags: true
         });
         this.invalidbotter = invalidbotter;
@@ -96,6 +115,7 @@ class Gui {
         this.screen.append(this.background);
         this.screen.append(this.inputBox);
         this.screen.append(this.chatBox);
+        this.screen.append(this.playerList);
         //  this.screen.append(this.playerListBox);
     }
     addListeners() {
@@ -174,6 +194,7 @@ class Gui {
     }*/
     renderScreen() {
         this.screen.render();
+        this.playerList.render();
     }
     updateComponents() {
         this.inputBox.style.fg = this.fontColor;
@@ -181,7 +202,9 @@ class Gui {
         this.background.style.bg = this.backgroundColor;
         this.background.style.fg = this.fontColor;
         this.chatBox.style.fg = this.fontColor;
-        this.chatBox.style.bg = this.backgroundColor;
+        this.chatBox.style.bg = this.chatBackground;
+        this.playerList.style.fg = this.fontColor;
+        this.playerList.style.bg = this.backgroundColor;
     }
 }
 exports.default = Gui;

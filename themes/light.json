@@ -1,0 +1,22 @@
+{
+  "name": "Light",
+  "author": "SirLennox",
+  "keys": [
+    {
+      "key": "backgroundColor",
+      "value": "#FFFFFF"
+    },
+    {
+      "key": "chatBackground",
+      "value": "#878484"
+    },
+    {
+      "key": "inputBoxBackground",
+      "value": "#C1C1C1"
+    },
+    {
+      "key": "fontColor",
+      "value": "#000000"
+    }
+  ]
+}

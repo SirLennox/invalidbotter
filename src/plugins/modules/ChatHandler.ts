@@ -27,6 +27,9 @@ export const ChatHandler: Module = {
         for(let bot of botter.getBotsOnServer()) {
             botter.addListenerToBot(bot, "message", (message, type) => {
                 if(type !== "game_info") {
+                    if(!botter.getSelectedBots().includes(bot)) {
+                        return;
+                    }
                     botter.log(message/*.toAnsi()*/, "CHAT", bot);
                 }
             }, "CHAT_HANDLER");

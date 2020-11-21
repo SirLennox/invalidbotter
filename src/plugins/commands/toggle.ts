@@ -21,14 +21,36 @@ export const Toggle: Command = {
             if(!module.toggled) {
                 invalidbotter.log("{#0FFF00-fg}Enabled{/} {bold}" + module.name + "{/bold}", "MODULE");
                 module.toggled = true;
+                try {
                 module.onEnable(invalidbotter);
+                } catch(e) {
+                    console.error("An unexpected error occurred while enabling " + module.name + ".");
+                    console.error(e.message);
+                }
                 module.loop = setInterval(() => {
+                    try {
                     module.onUpdate(invalidbotter);
+                    } catch(e) {
+                        console.error("An unexpected error occurred while updating " + module.name + ".");
+                        console.error(e.message);
+                        module.toggled = false;
+                        try {
+                            module.onDisable(this);
+                        } catch(e) {
+                            console.error("An unexpected error occurred while disabling " + module.name + ".");
+                            console.error(e.message);
+                        }
+                    }
                 }, 1000 / module.loopInterval);
 
             }else {
                 invalidbotter.log("{#FF0000-fg}Disabled{/} {bold}" + module.name + "{/bold}", "MODULE");
+               try {
                 module.onDisable(invalidbotter);
+               } catch(e) {
+                   console.error("An unexpected error occurred while enabling " + module.name + ".");
+                   console.error(e.message);
+               }
                 if(module.loop) {
                     clearInterval(module.loop);
                 }

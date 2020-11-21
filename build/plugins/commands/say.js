@@ -9,7 +9,12 @@ exports.Toggle = {
     version: "1.0",
     onCommand(args, invalidbotter) {
         if (args.length > 0) {
-            for (let bot of invalidbotter.getSelectedBots()) {
+            let bots = invalidbotter.getSelectedBots();
+            if (bots.length < 1) {
+                console.error("No bots selected.");
+                return;
+            }
+            for (let bot of bots) {
                 bot.chat(invalidbotter.stringifyArray(args, 0, args.length, " "));
             }
         }

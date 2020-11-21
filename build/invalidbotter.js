@@ -28,11 +28,13 @@ const moduleloader_1 = __importDefault(require("./moduleloader"));
 const commandloader_1 = __importDefault(require("./commandloader"));
 const gui_1 = __importDefault(require("./gui/gui"));
 const ThemeManager_1 = __importDefault(require("./ThemeManager"));
+const blessed = __importStar(require("blessed"));
 class InvalidBotter {
     //TODO ADD THEMES WITH COLORS ETC
     constructor() {
         this.bots = [];
         this.botDelayIndex = -1;
+        this.enableDrag = false;
         this.themeManager = new ThemeManager_1.default(this);
         this.configReader = new configreader_1.default();
         this.config = this.configReader.readConfigFile("./settings.json");
@@ -52,9 +54,29 @@ class InvalidBotter {
         this.moduleLoader.reloadModules();
         for (let module of this.moduleLoader.modules) {
             if (module.toggled) {
-                module.onEnable(this);
+                try {
+                    module.onEnable(this);
+                }
+                catch (e) {
+                    console.error("An unexpected error occurred while enabling " + module.name + ".");
+                    console.error(e.message);
+                }
                 module.loop = setInterval(() => {
-                    module.onUpdate(this);
+                    try {
+                        module.onUpdate(this);
+                    }
+                    catch (e) {
+                        console.error("An unexpected error occurred while updating " + module.name + ".");
+                        console.error(e.message);
+                        module.toggled = false;
+                        try {
+                            module.onDisable(this);
+                        }
+                        catch (e) {
+                            console.error("An unexpected error occurred while disabling " + module.name + ".");
+                            console.error(e.message);
+                        }
+                    }
                 }, 1000 / module.loopInterval);
             }
         }
@@ -70,7 +92,13 @@ class InvalidBotter {
                 this.log("Unknown command! Type {bold}'help'{/bold} for help.", "ERROR");
                 return;
             }
-            command.onCommand(args, this);
+            try {
+                command.onCommand(args, this);
+            }
+            catch (e) {
+                console.error("An unexpected error occurred while performing this command.");
+                console.error(e.message);
+            }
         }
     }
     log(text, loglevel, bot) {
@@ -94,7 +122,7 @@ class InvalidBotter {
     }
     getBotJSONObjectByName(name) {
         for (let bot of this.bots) {
-            if (bot._client.username.toUpperCase() === name.toUpperCase() && bot.onServer) {
+            if (bot.bot._client.username.toUpperCase() === name.toUpperCase() && bot.onServer) {
                 return bot;
             }
         }
@@ -129,7 +157,9 @@ class InvalidBotter {
             listeners: [],
             onServer: false,
             ip: options.host,
-            port: options.port
+            port: options.port,
+            selected: false,
+            box: undefined
         });
         this.addListenerToBot(bot, "spawn", () => {
             for (let module of this.moduleLoader.modules) {
@@ -143,6 +173,7 @@ class InvalidBotter {
                     break;
                 }
             }
+            this.refreshBotBoxes();
         });
         this.addListenerToBot(bot, "kicked", (reason, loggedIn) => {
             this.removeBot(bot);
@@ -152,12 +183,6 @@ class InvalidBotter {
                 }
             }
         });
-        /* this.gui.shownBots.push({
-             bot: bot,
-             selected: false,
-             box: undefined
-         })*/
-        //this.gui.refreshPlayerList();
         return bot;
     }
     getAllBots() {
@@ -179,7 +204,7 @@ class InvalidBotter {
     getSelectedBots() {
         let array = [];
         for (let bot of this.bots) {
-            if (bot.onServer) {
+            if (bot.onServer && bot.selected) {
                 array.push(bot.bot);
             }
         }
@@ -194,13 +219,68 @@ class InvalidBotter {
             }
         }
     }
-    removeBot(bot) {
-        for (let slct = 0; slct < this.gui.shownBots.length; slct++) {
-            if (this.gui.shownBots[slct].bot === bot) {
-                this.gui.shownBots.splice(slct, 1);
+    removeBotBox(bot) {
+        let sliceBox = this.getBotJSONObjectByName(bot._client.username);
+        this.removeBotBoxByJSONObj(sliceBox);
+    }
+    removeBotBoxByJSONObj(bot) {
+        this.removeBotBoxByBox(bot.box);
+    }
+    removeBotBoxByBox(sliceBox) {
+        if (!sliceBox)
+            return;
+        for (let box = 0; box < this.gui.playerList.children.length; box++) {
+            if (this.gui.playerList.children[box] === sliceBox) {
+                this.gui.playerList.remove(this.gui.playerList.children[box]);
+                //this.gui.playerList.children.slice(box, 1);
+                this.gui.renderScreen();
                 break;
             }
         }
+    }
+    refreshBotBoxes() {
+        let index = 0;
+        this.gui.playerList.children = [];
+        for (let bot in this.bots) {
+            if (this.bots[bot].onServer) {
+                let box = blessed.box({
+                    top: index,
+                    left: "0%",
+                    width: "100%-4",
+                    height: 1,
+                    style: {
+                        fg: this.bots[bot].selected ? this.gui.chatBackground : this.gui.fontColor,
+                        bg: !this.bots[bot].selected ? this.gui.chatBackground : this.gui.fontColor
+                    },
+                    focusable: false,
+                    hoverText: this.bots[bot].ip + ":" + this.bots[bot].port,
+                    tags: true
+                });
+                this.gui.playerList.append(box);
+                box.pushLine(this.bots[bot].bot._client.username);
+                box.on("click", () => {
+                    if (!this.bots[bot])
+                        return this.refreshBotBoxes();
+                    if (!this.bots[bot].bot)
+                        return this.refreshBotBoxes();
+                    if (!this.bots[bot].bot._client)
+                        return this.refreshBotBoxes();
+                    this.bots[bot].selected = !this.bots[bot].selected;
+                    this.refreshBotBoxes();
+                });
+                this.bots[bot].box = box;
+                index++;
+            }
+        }
+        //this.gui.playerList.render();
+        this.gui.renderScreen();
+    }
+    removeBot(bot) {
+        /*    for(let bot in this.bots) {
+                if(this.bots[bot].bot === bot) {
+                    this.bots[bot].onServer = false;
+                }
+            }*/
         for (let botPart = 0; botPart < this.bots.length; botPart++) {
             if (this.bots[botPart].bot === bot) {
                 for (let listener of this.bots[botPart].listeners) {
@@ -211,7 +291,7 @@ class InvalidBotter {
             }
         }
         bot.quit();
-        //this.gui.refreshPlayerList();
+        this.refreshBotBoxes();
     }
     removeListenersFromBot(bot, type, key) {
         for (let bP of this.bots) {

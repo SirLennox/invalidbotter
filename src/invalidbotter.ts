@@ -8,7 +8,7 @@ import {Widgets} from "blessed";
 import Log = Widgets.Log;
 import {type} from "os";
 import ThemeManager from "./ThemeManager";
-
+import * as blessed from "blessed";
 
 export default class InvalidBotter {
 
@@ -48,9 +48,26 @@ export default class InvalidBotter {
         this.moduleLoader.reloadModules();
         for(let module of this.moduleLoader.modules) {
             if(module.toggled) {
+             try {
                 module.onEnable(this);
+            } catch(e) {
+                console.error("An unexpected error occurred while enabling " + module.name + ".");
+                console.error(e.message);
+            }
                 module.loop = setInterval(() => {
+                 try {
                     module.onUpdate(this);
+                } catch(e) {
+                    console.error("An unexpected error occurred while updating " + module.name + ".");
+                    console.error(e.message);
+                    module.toggled = false;
+                    try {
+                        module.onDisable(this);
+                    } catch(e) {
+                        console.error("An unexpected error occurred while disabling " + module.name + ".");
+                        console.error(e.message);
+                    }
+                 }
                 }, 1000 / module.loopInterval);
             }
         }
@@ -67,8 +84,12 @@ export default class InvalidBotter {
                 this.log("Unknown command! Type {bold}'help'{/bold} for help.", "ERROR");
                 return;
             }
-
-            command.onCommand(args, this);
+            try {
+                command.onCommand(args, this);
+            } catch(e) {
+                console.error("An unexpected error occurred while performing this command.");
+                console.error(e.message);
+            }
         }
 
 
@@ -94,9 +115,11 @@ export default class InvalidBotter {
         }
     }
 
+
+
     public getBotJSONObjectByName(name: string): any {
         for(let bot of this.bots) {
-            if(bot._client.username.toUpperCase() === name.toUpperCase() && bot.onServer) {
+            if(bot.bot._client.username.toUpperCase() === name.toUpperCase() && bot.onServer) {
                 return bot;
             }
         }
@@ -137,7 +160,9 @@ export default class InvalidBotter {
             listeners: [],
             onServer: false,
             ip: options.host,
-            port: options.port
+            port: options.port,
+            selected: false,
+            box: undefined
         })
 
         this.addListenerToBot(bot, "spawn", () => {
@@ -152,6 +177,7 @@ export default class InvalidBotter {
                     break;
                 }
             }
+            this.refreshBotBoxes();
         });
 
         this.addListenerToBot(bot, "kicked", (reason, loggedIn) => {
@@ -163,12 +189,6 @@ export default class InvalidBotter {
             }
         })
 
-       /* this.gui.shownBots.push({
-            bot: bot,
-            selected: false,
-            box: undefined
-        })*/
-        //this.gui.refreshPlayerList();
         return bot;
     }
 
@@ -192,7 +212,7 @@ export default class InvalidBotter {
     public getSelectedBots() : Bot[] {
         let array: Bot[] = [];
         for(let bot of this.bots) {
-            if(bot.onServer) {
+            if(bot.onServer && bot.selected) {
                 array.push(bot.bot);
             }
         }
@@ -210,13 +230,74 @@ export default class InvalidBotter {
 
     }
 
-    public removeBot(bot: Bot) {
-        for(let slct = 0; slct < this.gui.shownBots.length; slct++) {
-            if(this.gui.shownBots[slct].bot === bot) {
-                this.gui.shownBots.splice(slct, 1);
+    public removeBotBox(bot: Bot) {
+        let sliceBox = this.getBotJSONObjectByName(bot._client.username);
+        this.removeBotBoxByJSONObj(sliceBox);
+    }
+
+    public removeBotBoxByJSONObj(bot: any) {
+        this.removeBotBoxByBox(bot.box);
+    }
+
+
+
+    public removeBotBoxByBox(sliceBox: any) {
+        if(!sliceBox) return;
+        for(let box = 0; box < this.gui.playerList.children.length; box++) {
+            if(this.gui.playerList.children[box] === sliceBox) {
+                this.gui.playerList.remove(this.gui.playerList.children[box]);
+                //this.gui.playerList.children.slice(box, 1);
+                this.gui.renderScreen();
                 break;
             }
         }
+    }
+
+
+
+    public enableDrag = false;
+    public refreshBotBoxes() {
+        let index = 0;
+        this.gui.playerList.children = [];
+        for(let bot in this.bots) {
+            if(this.bots[bot].onServer) {
+                let box = blessed.box({
+                    top: index,
+                    left: "0%",
+                    width: "100%-4",
+                    height: 1,
+                    style: {
+                        fg: this.bots[bot].selected ? this.gui.chatBackground : this.gui.fontColor,
+                        bg: !this.bots[bot].selected ? this.gui.chatBackground : this.gui.fontColor
+                    },
+                    focusable: false,
+                    hoverText: this.bots[bot].ip + ":" + this.bots[bot].port,
+                    tags: true
+                });
+                this.gui.playerList.append(box);
+                box.pushLine(this.bots[bot].bot._client.username);
+                box.on("click", () => {
+                    if(!this.bots[bot]) return this.refreshBotBoxes();
+                    if(!this.bots[bot].bot) return this.refreshBotBoxes();
+                    if(!this.bots[bot].bot._client) return this.refreshBotBoxes();
+                    this.bots[bot].selected = !this.bots[bot].selected;
+                    this.refreshBotBoxes();
+                });
+                this.bots[bot].box = box;
+                index++;
+            }
+        }
+        //this.gui.playerList.render();
+        this.gui.renderScreen();
+    }
+
+    public removeBot(bot: Bot) {
+    /*    for(let bot in this.bots) {
+            if(this.bots[bot].bot === bot) {
+                this.bots[bot].onServer = false;
+            }
+        }*/
+
         for(let botPart = 0; botPart < this.bots.length; botPart++) {
             if(this.bots[botPart].bot === bot) {
                 for(let listener of this.bots[botPart].listeners) {
@@ -227,7 +308,7 @@ export default class InvalidBotter {
             }
         }
         bot.quit();
-        //this.gui.refreshPlayerList();
+        this.refreshBotBoxes();
 
     }
 

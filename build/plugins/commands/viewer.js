@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Toggle = void 0;
 let index = 0;
-const mineflayerViewer = require('prismarine-viewer').mineflayer;
 exports.Toggle = {
     aliases: [],
     author: "SirLennox",
@@ -19,15 +18,8 @@ exports.Toggle = {
             console.error("Bot not found!");
             return;
         }
-        mineflayerViewer(bot, { port: 3000 + index });
-        const path = [bot.entity.position.clone()];
-        invalidbotter.addListenerToBot(bot, "move", () => {
-            if (path[path.length - 1].distanceTo(bot.entity.position) > 1) {
-                path.push(bot.entity.position.clone());
-                // @ts-ignore
-                bot.viewer.drawLine('path', path);
-            }
-        }, "VIEWER_KICK_EVENT");
-        index++;
+        console.warn("InDev, please wait for updates...");
+        /*        mineflayerViewer(bot, { port: 3000 + index });
+                index++;*/
     }
 };

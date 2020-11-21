@@ -7,6 +7,6 @@ class Command {
         this.version = version;
         this.description = description;
     }
-    onCommand(args, invalidbotter) { }
+    onCommand(args, botter) { }
 }
 exports.default = Command;

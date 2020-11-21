@@ -3,12 +3,7 @@ import InvalidBotter from "../../invalidbotter";
 import {Bot} from "mineflayer";
 
 export const KickHandler: Module = {
-    onBotSpawn(bot: Bot, botter: InvalidBotter): void {
-        botter.addListenerToBot(bot, "kicked", (reason, loggedIn) => {
-            botter.log(bot._client.username + " got kicked for: " + reason, "KICK", bot);
-            botter.removeBot(bot);
-        });
-    },
+    onBotSpawn(bot: Bot, botter: InvalidBotter): void {},
     author: "SirLennox",
     description: "A kick handler to notify if you got kicked from a server",
     loop: undefined,

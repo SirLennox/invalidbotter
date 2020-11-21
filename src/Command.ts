@@ -14,6 +14,6 @@ export default class Command {
         this.description = description;
     }
 
-    public onCommand(args: string[], invalidbotter: InvalidBotter): void { }
+    public onCommand(args: string[], botter: InvalidBotter): void { }
 
 }

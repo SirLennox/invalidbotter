@@ -3,7 +3,6 @@ import {Widgets} from "blessed";
 import InvalidBotter from "../invalidbotter";
 import * as clipboardy from "clipboardy";
 import {Bot} from "mineflayer";
-
 export default class Gui {
 
     constructor(invalidbotter: InvalidBotter) {
@@ -44,6 +43,23 @@ export default class Gui {
         fullUnicode: true
     });
 
+    public playerList: Widgets.BoxElement = blessed.box({
+        left: "0%",
+        width: "15%",
+        height: "100%",
+        style: {
+            bg: this.backgroundColor,
+            fg: this.fontColor
+        },
+        border: {
+          type: "line",
+          fg: 1,
+          bg: 0
+        },
+        focusable: false,
+        draggable: true
+    });
+
     public background: Widgets.BoxElement = blessed.box({
         top: "0%",
         left: "0%",
@@ -52,7 +68,8 @@ export default class Gui {
         style: {
             fg: this.fontColor,
             bg: this.backgroundColor
-        }
+        },
+        focusable: false
     });
 
     public inputBox: Widgets.TextboxElement = blessed.textbox({
@@ -64,7 +81,8 @@ export default class Gui {
             fg: this.fontColor,
             bg: this.inputBoxBackground
         },
-        inputOnFocus: true
+        inputOnFocus: true,
+        focusable: true
     });
 
     public chatBox: Widgets.BoxElement = blessed.box({
@@ -77,6 +95,7 @@ export default class Gui {
             bg: this.chatBackground,
         },
         scrollable: true,
+        focusable: false,
         tags: true
     });
 
@@ -93,6 +112,7 @@ export default class Gui {
         this.screen.append(this.background);
         this.screen.append(this.inputBox);
         this.screen.append(this.chatBox);
+        this.screen.append(this.playerList);
         //  this.screen.append(this.playerListBox);
     }
 
@@ -173,10 +193,10 @@ export default class Gui {
         this.renderScreen();
     }*/
 
-
-
+    
     public renderScreen() {
         this.screen.render();
+        this.playerList.render();
     }
 
     public updateComponents() {
@@ -184,8 +204,10 @@ export default class Gui {
         this.inputBox.style.bg = this.inputBoxBackground;
         this.background.style.bg = this.backgroundColor;
         this.background.style.fg = this.fontColor;
-         this.chatBox.style.fg = this.fontColor;
-        this.chatBox.style.bg = this.backgroundColor;
+        this.chatBox.style.fg = this.fontColor;
+        this.chatBox.style.bg = this.chatBackground;
+        this.playerList.style.fg = this.fontColor;
+        this.playerList.style.bg = this.backgroundColor;
     }
 
 }
