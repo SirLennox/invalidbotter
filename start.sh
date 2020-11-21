@@ -1,2 +1,2 @@
-[ ! -d "node-modules" ] && npm install
+[ ! -d "node-modules" ] && ./install.sh
 npm run run
