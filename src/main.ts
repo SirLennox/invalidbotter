@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import InvalidBotter from "./invalidbotter";
 
 const invalidbotter = new InvalidBotter();

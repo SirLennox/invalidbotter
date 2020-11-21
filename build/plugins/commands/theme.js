@@ -12,7 +12,7 @@ exports.Theme = {
     description: "Select a theme",
     version: "1.0",
     onCommand(args, invalidbotter) {
-        let files = fs_1.default.readdirSync("./themes");
+        let files = fs_1.default.readdirSync("./build/themes");
         let file = undefined;
         if (files.includes(args[0])) {
             file = args[0];
@@ -24,7 +24,7 @@ exports.Theme = {
             console.error("Theme not found! Please check your spelling and capitalization.");
             return;
         }
-        invalidbotter.themeManager.selectTheme("./themes/" + file);
+        invalidbotter.themeManager.selectTheme("./build/themes/" + file);
         invalidbotter.log("Selected theme: " + file, "SUCCESS");
     }
 };

@@ -27,8 +27,8 @@ export default class InvalidBotter {
     public constructor() {
         this.themeManager = new ThemeManager(this);
         this.configReader = new ConfigReader();
-        this.config = this.configReader.readConfigFile("./settings.json");
-        this.messageColors = this.configReader.readConfigFile("./defaultMessageColors.json");
+        this.config = this.configReader.readConfigFile("./build/settings.json");
+        this.messageColors = this.configReader.readConfigFile("./build/defaultMessageColors.json");
 
         this.gui = new Gui(this);
         this.commandLoader = new CommandLoader(this);
