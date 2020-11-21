@@ -1,0 +1,1 @@
+{"messageFormat":"{time} \u001b[30m|\u001b[39m {sender} \u001b[30m~\u001b[39m {message}","theme":"dark","themesPath":"themes/","pluginsPath":"plugins/","commandsPath":"commands/","ticksPerSecond":1}
