@@ -37,8 +37,8 @@ class InvalidBotter {
         this.enableDrag = false;
         this.themeManager = new ThemeManager_1.default(this);
         this.configReader = new configreader_1.default();
-        this.config = this.configReader.readConfigFile("./settings.json");
-        this.messageColors = this.configReader.readConfigFile("./defaultMessageColors.json");
+        this.config = this.configReader.readConfigFile("./build/settings.json");
+        this.messageColors = this.configReader.readConfigFile("./build/defaultMessageColors.json");
         this.gui = new gui_1.default(this);
         this.commandLoader = new commandloader_1.default(this);
         this.moduleLoader = new moduleloader_1.default(this);
