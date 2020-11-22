@@ -1,5 +1,6 @@
 import Command from "./Command";
 
+import * as path from "path";
 import * as fs from "fs";
 import InvalidBotter from "./invalidbotter";
 import {eventNames} from "cluster";
@@ -7,7 +8,10 @@ import {eventNames} from "cluster";
 export default class CommandLoader {
     public commands: Command[];
 
-    constructor(invalidbotter: InvalidBotter) {
+    public pathToCommands;
+
+    constructor(invalidbotter: InvalidBotter, pathToCommands) {
+        this.pathToCommands = pathToCommands;
     }
 
     public loadCommand(name: string): Command {
@@ -29,10 +33,11 @@ export default class CommandLoader {
 
     public refreshCommands() {
         this.commands = [];
-        let files: string[] = fs.readdirSync("./build/plugins/commands");
+        let files: string[] = fs.readdirSync(this.pathToCommands);
         for(let file of files) {
             if(file.endsWith(".js")) {
-                let command = require("../build/plugins/commands/" + file);
+
+                let command = require( path.join(__dirname, "plugins", "commands", file));
                 this.commands.push(command[Object.keys(command)[0]]);
             }
         }

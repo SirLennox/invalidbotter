@@ -2,7 +2,7 @@ import Module from "../../Module";
 import InvalidBotter from "../../invalidbotter";
 import {Bot} from "mineflayer";
 import fs from "fs";
-
+import * as path from "path";
 let commandWatch = undefined;
 let moduleWatch = undefined;
 let themeWatch = undefined;
@@ -17,14 +17,14 @@ export const AutoRefresh: Module = {
     toggled: true,
     version: "1.0",
     onDisable(botter: InvalidBotter): void {
-        fs.unwatchFile("./build/plugins/commands/", commandWatch);
-        fs.unwatchFile("./build/plugins/modules/", moduleWatch);
+        fs.unwatchFile(path.join(__dirname, "../commands/"), commandWatch);
+        fs.unwatchFile(__dirname, moduleWatch);
     },
     onEnable(botter: InvalidBotter): void {
-        commandWatch = fs.watch("./build/plugins/commands/", (event, filename) => {
+        commandWatch = fs.watch(path.join(__dirname, "../commands/"), (event, filename) => {
             botter.commandLoader.refreshCommands();
         })
-        moduleWatch = fs.watch("./build/plugins/modules/", (event, filename) => {
+        moduleWatch = fs.watch(__dirname, (event, filename) => {
             botter.moduleLoader.reloadModules();
         })
     },

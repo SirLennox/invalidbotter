@@ -9,7 +9,7 @@ import Log = Widgets.Log;
 import {type} from "os";
 import ThemeManager from "./ThemeManager";
 import * as blessed from "blessed";
-
+import * as path from "path";
 export default class InvalidBotter {
 
 
@@ -27,13 +27,12 @@ export default class InvalidBotter {
     public constructor() {
         this.themeManager = new ThemeManager(this);
         this.configReader = new ConfigReader();
-        this.config = this.configReader.readConfigFile("./build/settings.json");
-        this.messageColors = this.configReader.readConfigFile("./build/defaultMessageColors.json");
+        this.config = this.configReader.readConfigFile(path.join(__dirname, "/settings.json"));
+        this.messageColors = this.configReader.readConfigFile(path.join(__dirname, "/defaultMessageColors.json"));
 
         this.gui = new Gui(this);
-        this.commandLoader = new CommandLoader(this);
-        this.moduleLoader = new ModuleLoader(this);
-
+        this.commandLoader = new CommandLoader(this, path.join(__dirname, "/plugins/commands/"));
+        this.moduleLoader = new ModuleLoader(this, path.join(__dirname, "/plugins/modules/"));
     }
 
     public start(): void {
@@ -42,7 +41,7 @@ export default class InvalidBotter {
         console.log = (input) => this.log(input, "INFO");
         console.info = (input) => this.log(input, "INFO");
         console.error = (input) => this.log(input, "ERROR");
-        console.warn = (input) => this.log(input, "WARN");
+        console.warn = (input) => this.log(input, "WARNING");
        // this.themeManager.selectTheme("./themes/dark.json");
         this.commandLoader.refreshCommands();
         this.moduleLoader.reloadModules();
@@ -272,6 +271,10 @@ export default class InvalidBotter {
                     },
                     focusable: false,
                     hoverText: this.bots[bot].ip + ":" + this.bots[bot].port,
+                 /*   hover: {
+                        text: this.bots[bot].ip + ":" + this.bots[bot].port,
+                        bg: this.gui.backgroundColor
+                    },*/
                     tags: true
                 });
                 this.gui.playerList.append(box);

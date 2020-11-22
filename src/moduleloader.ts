@@ -1,11 +1,16 @@
 import Module from "./Module";
 import fs from "fs";
 import InvalidBotter from "./invalidbotter";
+import path from "path";
 
 export default class ModuleLoader {
     public modules: Module[];
 
-    constructor(invalidbotter: InvalidBotter) {
+    public pathToModules;
+    public invalidbotter: InvalidBotter;
+    constructor(invalidbotter: InvalidBotter, pathToModules) {
+        this.invalidbotter = invalidbotter;
+        this.pathToModules = pathToModules;
     }
 
 
@@ -20,10 +25,10 @@ export default class ModuleLoader {
 
     public reloadModules() {
         this.modules = [];
-        let files: string[] = fs.readdirSync("./build/plugins/modules");
+        let files: string[] = fs.readdirSync(this.pathToModules);
         for(let file of files) {
             if(file.endsWith(".js")) {
-                let module = require("../build/plugins/modules/" + file);
+                let module = require( path.join(__dirname, "plugins", "modules", file));
                 this.modules.push(module[Object.keys(module)[0]]);
             }
         }

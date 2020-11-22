@@ -29,6 +29,7 @@ const commandloader_1 = __importDefault(require("./commandloader"));
 const gui_1 = __importDefault(require("./gui/gui"));
 const ThemeManager_1 = __importDefault(require("./ThemeManager"));
 const blessed = __importStar(require("blessed"));
+const path = __importStar(require("path"));
 class InvalidBotter {
     //TODO ADD THEMES WITH COLORS ETC
     constructor() {
@@ -37,18 +38,18 @@ class InvalidBotter {
         this.enableDrag = false;
         this.themeManager = new ThemeManager_1.default(this);
         this.configReader = new configreader_1.default();
-        this.config = this.configReader.readConfigFile("./build/settings.json");
-        this.messageColors = this.configReader.readConfigFile("./build/defaultMessageColors.json");
+        this.config = this.configReader.readConfigFile(path.join(__dirname, "/settings.json"));
+        this.messageColors = this.configReader.readConfigFile(path.join(__dirname, "/defaultMessageColors.json"));
         this.gui = new gui_1.default(this);
-        this.commandLoader = new commandloader_1.default(this);
-        this.moduleLoader = new moduleloader_1.default(this);
+        this.commandLoader = new commandloader_1.default(this, path.join(__dirname, "/plugins/commands/"));
+        this.moduleLoader = new moduleloader_1.default(this, path.join(__dirname, "/plugins/modules/"));
     }
     start() {
         this.gui.createGui();
         console.log = (input) => this.log(input, "INFO");
         console.info = (input) => this.log(input, "INFO");
         console.error = (input) => this.log(input, "ERROR");
-        console.warn = (input) => this.log(input, "WARN");
+        console.warn = (input) => this.log(input, "WARNING");
         // this.themeManager.selectTheme("./themes/dark.json");
         this.commandLoader.refreshCommands();
         this.moduleLoader.reloadModules();
@@ -254,6 +255,10 @@ class InvalidBotter {
                     },
                     focusable: false,
                     hoverText: this.bots[bot].ip + ":" + this.bots[bot].port,
+                    /*   hover: {
+                           text: this.bots[bot].ip + ":" + this.bots[bot].port,
+                           bg: this.gui.backgroundColor
+                       },*/
                     tags: true
                 });
                 this.gui.playerList.append(box);

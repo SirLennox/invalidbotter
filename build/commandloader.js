@@ -19,9 +19,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const path = __importStar(require("path"));
 const fs = __importStar(require("fs"));
 class CommandLoader {
-    constructor(invalidbotter) {
+    constructor(invalidbotter, pathToCommands) {
+        this.pathToCommands = pathToCommands;
     }
     loadCommand(name) {
         for (let cmd of this.commands) {
@@ -42,10 +44,10 @@ class CommandLoader {
     }
     refreshCommands() {
         this.commands = [];
-        let files = fs.readdirSync("./build/plugins/commands");
+        let files = fs.readdirSync(this.pathToCommands);
         for (let file of files) {
             if (file.endsWith(".js")) {
-                let command = require("../build/plugins/commands/" + file);
+                let command = require(path.join(__dirname, "plugins", "commands", file));
                 this.commands.push(command[Object.keys(command)[0]]);
             }
         }

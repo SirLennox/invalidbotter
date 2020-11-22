@@ -27,6 +27,20 @@ class Gui {
         this.chatBackground = "#1d1d1d";
         this.inputBoxBackground = "#2d2d2d";
         this.fontColor = "#ffffff";
+        this.borderBackground = 0;
+        this.borderColor = 1;
+        this.inputBoxLeft = "15%";
+        this.inputBoxWidth = "98%";
+        this.inputBoxHeight = 1;
+        this.inputBoxTop = "100%-2";
+        this.chatBoxLeft = "15%";
+        this.chatBoxWidth = "70%";
+        this.chatBoxHeight = "95%";
+        this.chatBoxTop = "0%";
+        this.playerListBoxLeft = "0%";
+        this.playerListBoxWidth = "15%";
+        this.playerListBoxHeight = "100%";
+        this.playerListBoxTop = "0%";
         this.commandHistory = [];
         this.commandHistoryIndex = 0;
         this.shownBots = [];
@@ -51,17 +65,18 @@ class Gui {
             fullUnicode: true
         });
         this.playerList = blessed.box({
-            left: "0%",
-            width: "15%",
-            height: "100%",
+            left: this.playerListBoxLeft,
+            top: this.playerListBoxTop,
+            width: this.playerListBoxWidth,
+            height: this.playerListBoxHeight,
             style: {
                 bg: this.backgroundColor,
                 fg: this.fontColor
             },
             border: {
                 type: "line",
-                fg: 1,
-                bg: 0
+                fg: this.borderColor,
+                bg: this.borderBackground
             },
             focusable: false,
             draggable: true
@@ -78,29 +93,32 @@ class Gui {
             focusable: false
         });
         this.inputBox = blessed.textbox({
-            top: "95%",
-            left: "15%",
-            width: "98%",
-            height: "5%",
+            top: this.inputBoxTop,
+            left: this.inputBoxLeft,
+            width: this.inputBoxWidth,
+            height: this.inputBoxHeight,
             style: {
                 fg: this.fontColor,
                 bg: this.inputBoxBackground
             },
             inputOnFocus: true,
-            focusable: true
+            focusable: true,
+            draggable: true
         });
         this.chatBox = blessed.box({
-            top: "0%",
-            left: "15%",
-            width: "98%",
-            height: "95%",
+            top: this.chatBoxTop,
+            left: this.chatBoxLeft,
+            width: this.chatBoxWidth,
+            height: this.chatBoxHeight,
             style: {
                 fg: this.fontColor,
                 bg: this.chatBackground,
             },
             scrollable: true,
             focusable: false,
-            tags: true
+            tags: true,
+            draggable: true,
+            mouse: true
         });
         this.invalidbotter = invalidbotter;
     }
@@ -205,6 +223,20 @@ class Gui {
         this.chatBox.style.bg = this.chatBackground;
         this.playerList.style.fg = this.fontColor;
         this.playerList.style.bg = this.backgroundColor;
+        this.playerList.left = this.playerListBoxLeft;
+        this.playerList.top = this.playerListBoxTop;
+        this.playerList.width = this.playerListBoxWidth;
+        this.playerList.height = this.playerListBoxHeight;
+        this.playerList.border.fg = this.borderColor;
+        this.playerList.border.bg = this.borderBackground;
+        this.inputBox.top = this.inputBoxTop;
+        this.inputBox.left = this.inputBoxLeft;
+        this.inputBox.width = this.inputBoxWidth;
+        this.inputBox.height = this.inputBoxHeight;
+        this.chatBox.top = this.chatBoxTop;
+        this.chatBox.left = this.chatBoxLeft;
+        this.chatBox.width = this.chatBoxWidth;
+        this.chatBox.height = this.chatBoxHeight;
     }
 }
 exports.default = Gui;

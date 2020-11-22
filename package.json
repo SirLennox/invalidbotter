@@ -1,6 +1,6 @@
 {
   "name": "invalidbotter",
-  "version": "1.0.7",
+  "version": "1.1.19",
   "description": "A minecraft botter",
   "main": "build/main.js",
   "scripts": {
@@ -8,7 +8,21 @@
     "run": "node build/main.js",
     "start": "npm run build && npm run run"
   },
-  "keywords": ["minecraft", "mineflayer", "mcbotter", "minecraft-botter", "botting", "minebot", "minebotter", "bot-minecraft", "bot-minecraft-servers", "mc-botting", "botter-for-mc", "mc-botter-for-servers", "mc-online-botter"],
+  "keywords": [
+    "minecraft",
+    "mineflayer",
+    "mcbotter",
+    "minecraft-botter",
+    "botting",
+    "minebot",
+    "minebotter",
+    "bot-minecraft",
+    "bot-minecraft-servers",
+    "mc-botting",
+    "botter-for-mc",
+    "mc-botter-for-servers",
+    "mc-online-botter"
+  ],
   "author": "SirLennox",
   "license": "ISC",
   "dependencies": {
@@ -27,6 +41,10 @@
     "minecraft-protocol": "^1.19.0",
     "proxy-agent": "^4.0.0"
   },
-  "files": ["build"],
-  "bin": {"invalidbotter": "build/main.js"}
+  "files": [
+    "build"
+  ],
+  "bin": {
+    "invalidbotter": "build/main.js"
+  }
 }

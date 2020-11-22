@@ -4,8 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 class ModuleLoader {
-    constructor(invalidbotter) {
+    constructor(invalidbotter, pathToModules) {
+        this.invalidbotter = invalidbotter;
+        this.pathToModules = pathToModules;
     }
     loadModule(name) {
         for (let module of this.modules) {
@@ -17,10 +20,10 @@ class ModuleLoader {
     }
     reloadModules() {
         this.modules = [];
-        let files = fs_1.default.readdirSync("./build/plugins/modules");
+        let files = fs_1.default.readdirSync(this.pathToModules);
         for (let file of files) {
             if (file.endsWith(".js")) {
-                let module = require("../build/plugins/modules/" + file);
+                let module = require(path_1.default.join(__dirname, "plugins", "modules", file));
                 this.modules.push(module[Object.keys(module)[0]]);
             }
         }

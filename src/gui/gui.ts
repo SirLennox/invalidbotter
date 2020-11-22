@@ -16,6 +16,24 @@ export default class Gui {
     public inputBoxBackground: string = "#2d2d2d";
     public fontColor: string = "#ffffff";
 
+    public borderBackground: number = 0;
+    public borderColor: number = 1;
+    public inputBoxLeft: any = "15%";
+    public inputBoxWidth: any = "98%";
+    public inputBoxHeight: any = 1;
+    public inputBoxTop: any = "100%-2";
+
+    public chatBoxLeft: any = "15%";
+    public chatBoxWidth: any = "70%";
+    public chatBoxHeight: any = "95%";
+    public chatBoxTop: any = "0%";
+
+    public playerListBoxLeft: any = "0%";
+    public playerListBoxWidth: any = "15%";
+    public playerListBoxHeight: any = "100%";
+    public playerListBoxTop: any = "0%";
+
+
     public commandHistory: string[] = [];
     public commandHistoryIndex: number = 0;
 
@@ -44,17 +62,18 @@ export default class Gui {
     });
 
     public playerList: Widgets.BoxElement = blessed.box({
-        left: "0%",
-        width: "15%",
-        height: "100%",
+        left: this.playerListBoxLeft,
+        top: this.playerListBoxTop,
+        width: this.playerListBoxWidth,
+        height: this.playerListBoxHeight,
         style: {
             bg: this.backgroundColor,
             fg: this.fontColor
         },
         border: {
           type: "line",
-          fg: 1,
-          bg: 0
+          fg: this.borderColor,
+          bg: this.borderBackground
         },
         focusable: false,
         draggable: true
@@ -73,30 +92,33 @@ export default class Gui {
     });
 
     public inputBox: Widgets.TextboxElement = blessed.textbox({
-        top: "95%",
-        left: "15%",
-        width: "98%",
-        height: "5%",
+        top: this.inputBoxTop,
+        left: this.inputBoxLeft,
+        width: this.inputBoxWidth,
+        height: this.inputBoxHeight,
         style: {
             fg: this.fontColor,
             bg: this.inputBoxBackground
         },
         inputOnFocus: true,
-        focusable: true
+        focusable: true,
+        draggable: true
     });
 
     public chatBox: Widgets.BoxElement = blessed.box({
-        top: "0%",
-        left: "15%",
-        width: "98%",
-        height: "95%",
+        top: this.chatBoxTop,
+        left: this.chatBoxLeft,
+        width: this.chatBoxWidth,
+        height: this.chatBoxHeight,
         style: {
             fg: this.fontColor,
             bg: this.chatBackground,
         },
         scrollable: true,
         focusable: false,
-        tags: true
+        tags: true,
+        draggable: true,
+        mouse: true
     });
 
 
@@ -207,7 +229,22 @@ export default class Gui {
         this.chatBox.style.fg = this.fontColor;
         this.chatBox.style.bg = this.chatBackground;
         this.playerList.style.fg = this.fontColor;
-        this.playerList.style.bg = this.backgroundColor;
+        this.playerList.style.bg = this.backgroundColor
+        this.playerList.left = this.playerListBoxLeft;
+        this.playerList.top = this.playerListBoxTop;
+        this.playerList.width = this.playerListBoxWidth;
+        this.playerList.height = this.playerListBoxHeight;
+        this.playerList.border.fg = this.borderColor;
+        this.playerList.border.bg = this.borderBackground;
+        this.inputBox.top = this.inputBoxTop;
+        this.inputBox.left = this.inputBoxLeft;
+        this.inputBox.width = this.inputBoxWidth;
+        this.inputBox.height = this.inputBoxHeight;
+        this.chatBox.top = this.chatBoxTop;
+        this.chatBox.left = this.chatBoxLeft;
+        this.chatBox.width = this.chatBoxWidth;
+        this.chatBox.height = this.chatBoxHeight;
+
     }
 
 }
