@@ -20,4 +20,4 @@ Or you can use plugins from 3rd party developers.
 
 ## Discord
 
-For support join our [discord server]£(https://discord.gg/AbQtPjv9nq)
+For support join our [discord server](https://discord.gg/AbQtPjv9nq)
