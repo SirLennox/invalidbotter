@@ -22,6 +22,8 @@ Also you can **use plugins from 3rd party developers**.
 4. Execute ``invalidbotter`` and the InvalidBotter will show up.
 5. Have fun
 
+**Recommened Terminal: Windows Terminal**
+
 ### Linux:
 1. Install **npm**
 2. Open your terminal
