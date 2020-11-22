@@ -1,14 +1,12 @@
 # InvalidBotter
-The InvalidBotter is a minecraft botting tool.
-
-It is based on a Terminal GUI.
+The InvalidBotter is a **minecraft botting tool** based on a Terminal GUI.
 
 
-It is 100£% customizable:
+It is **100% customizable**:
 
-You can make your own plugins (commands/modules)
-and share them to your friends or commiunity.
-Also you can use plugins from 3rd party developers.
+You can **make your own plugins** (commands/modules)
+and **share them** to your friends or commiunity.
+Also you can **use plugins from 3rd party developers**.
 
 ## Installation
 
