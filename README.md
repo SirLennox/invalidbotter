@@ -1,11 +1,6 @@
 # InvalidBotter
 
-[![forthebadge](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/open-source.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
- [![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
-
-The InvalidBotter is a **minecraft botting tool** based on a Terminal GUI.
-
+The InvalidBotter is a **100% customizable minecraft botting tool** based on a Terminal GUI.
 
 It is **100% customizable**:
 
@@ -19,3 +14,6 @@ Also you can **use plugins from 3rd party developers**.
 ## Discord
 
 For support join our [**discord server**](https://discord.gg/AbQtPjv9nq)
+
+
+[![forthebadge](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/open-source.svg)](https://forthebadge.com)
