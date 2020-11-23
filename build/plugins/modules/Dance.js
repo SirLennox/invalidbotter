@@ -7,7 +7,7 @@ exports.Dance = {
     author: "SirLennox",
     description: "Dance",
     loop: undefined,
-    loopInterval: 20,
+    loopInterval: 500,
     name: "Dance",
     toggled: false,
     version: "1.0",

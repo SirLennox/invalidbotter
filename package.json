@@ -1,6 +1,6 @@
 {
   "name": "invalidbotter",
-  "version": "2.3.19",
+  "version": "2.5.0",
   "description": "A minecraft botter",
   "main": "build/main.js",
   "scripts": {
@@ -35,6 +35,7 @@
     "minecraft-protocol": "^1.19.0",
     "mineflayer": "^2.34.0",
     "mineflayer-pathfinder": "^1.0.12",
+    "mineflayer-pvp": "^1.0.2",
     "path": "^0.12.7"
   },
   "devDependencies": {

@@ -15,7 +15,7 @@ exports.ChatHandler = {
     author: "SirLennox",
     description: "Post chat messages in console",
     loop: undefined,
-    loopInterval: 20,
+    loopInterval: 1000000000000,
     name: "ChatHandler",
     toggled: true,
     version: "1.0",

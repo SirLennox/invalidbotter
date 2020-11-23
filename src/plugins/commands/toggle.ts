@@ -41,7 +41,7 @@ export const Toggle: Command = {
                             console.error(e.message);
                         }
                     }
-                }, 1000 / module.loopInterval);
+                }, module.loopInterval);
 
             }else {
                 invalidbotter.log("{#FF0000-fg}Disabled{/} {bold}" + module.name + "{/bold}", "MODULE");

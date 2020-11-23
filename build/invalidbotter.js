@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -58,7 +58,7 @@ class InvalidBotter {
             this.writeInChatBox("\n\n");
         }
         else {
-            this.writeInChatBox("{#B400FF-fg}InvalidBotter  {/}{#FFFE00-fg}v" + pkg.version + "{/} {#0FFF00-fg}by {bold}SirLennox{/bold}{/}");
+            this.writeInChatBox("{#B400FF-fg}InvalidBotter {/}{#FFFE00-fg}v" + pkg.version + "{/} {#0FFF00-fg}by {bold}SirLennox{/bold}{/}");
             this.writeInChatBox("\n\n");
         }
         console.log = (input) => this.log(input, "INFO");
@@ -151,17 +151,28 @@ class InvalidBotter {
         }
         return "#FFFFFF";
     }
-    addBotWithDelay(options, sendMessage) {
+    addBotWithDelay(options, sendMessage, callback) {
         if (!sendMessage) {
             sendMessage = false;
         }
         this.botDelayIndex++;
         setTimeout(() => {
             let bot = this.addBot(options);
+            if (callback) {
+                callback(bot);
+            }
             if (sendMessage)
                 this.log("Joined server {bold}" + options.host + ":" + options.port + "{/bold} with account: {bold}" + options.username + "{/bold}", "SUCCESS");
             this.botDelayIndex--;
         }, this.getBotDelay());
+    }
+    isOwner(name) {
+        for (let owner of this.config.owners) {
+            if (owner.toUpperCase() === name.toUpperCase()) {
+                return true;
+            }
+        }
+        return false;
     }
     getBotDelay() {
         return this.config.joinDelay + (this.botDelayIndex * this.config.joinDelay);
@@ -254,6 +265,15 @@ class InvalidBotter {
         }
         return array;
     }
+    getSelectedBotsAsIBot() {
+        let array = [];
+        for (let bot of this.bots) {
+            if (bot.onServer && bot.selected) {
+                array.push(bot);
+            }
+        }
+        return array;
+    }
     addListenerToBot(bot, listenerType, func, key) {
         bot.on(listenerType, func);
         for (let botPart in this.bots) {
@@ -262,6 +282,24 @@ class InvalidBotter {
                 break;
             }
         }
+    }
+    getNearestPlayer(bot, canBeOwner) {
+        let nearest = null;
+        for (let entity in bot.players) {
+            if (bot.players[entity] && bot.players[entity].entity && bot.players[entity].position) {
+                if (bot.players[entity].entity !== bot.entity && (canBeOwner || !this.isOwner(bot.players[entity].username))) {
+                    if (!nearest) {
+                        nearest = bot.players[entity].entity;
+                    }
+                    else {
+                        if (bot.players[entity].entity.position.distanceTo(bot.position) < nearest.position.distanceTo(bot.position)) {
+                            nearest = bot.players[entity].entity;
+                        }
+                    }
+                }
+            }
+        }
+        return nearest;
     }
     addOnceListenerToBot(bot, listenerType, func, key) {
         bot.once(listenerType, func);

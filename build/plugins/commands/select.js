@@ -11,7 +11,7 @@ exports.Select = {
     version: "1.0",
     onCommand(args, invalidbotter) {
         if (args.length == 1) {
-            if (args[0].toUpperCase() === "*") {
+            if (args[0] === "*") {
                 const select = !invalidbotter.bots[0].selected;
                 for (let bot in invalidbotter.bots) {
                     invalidbotter.bots[bot].selected = select;

@@ -26,11 +26,12 @@ exports.Toggle = {
             }
             const mcData = require('minecraft-data')(bot.version);
             const defaultMove = new Movements(bot, mcData);
-            // @ts-ignore
-            bot.pathfinder.setMovements(defaultMove);
-            // @ts-ignore
-            bot.pathfinder.setGoal(new GoalXZ(args[1], args[2]));
-            invalidbotter.log("Going to: " + args[1] + "/" + args[2], "SUCCESS", bot);
+            bot["pathfinder"].setMovements(defaultMove);
+            bot["pathfinder"].setGoal(new GoalXZ(args[0], args[1]));
+            invalidbotter.log("Going to: " + args[0] + "/" + args[1], "SUCCESS", bot);
+            invalidbotter.addOnceListenerToBot(bot, "goal_reached", () => {
+                invalidbotter.log("Arrived!", "SUCCESS", bot);
+            });
         }
     }
 };

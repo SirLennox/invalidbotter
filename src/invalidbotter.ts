@@ -53,7 +53,7 @@ export default class InvalidBotter {
                 "               by {bold}SirLennox{/bold}                              {/}{#FFFE00-fg}v" + pkg.version + "{/}");
             this.writeInChatBox("\n\n");
         }else {
-            this.writeInChatBox("{#B400FF-fg}InvalidBotter  {/}{#FFFE00-fg}v" + pkg.version + "{/} {#0FFF00-fg}by {bold}SirLennox{/bold}{/}");
+            this.writeInChatBox("{#B400FF-fg}InvalidBotter {/}{#FFFE00-fg}v" + pkg.version + "{/} {#0FFF00-fg}by {bold}SirLennox{/bold}{/}");
             this.writeInChatBox("\n\n");
         }
         console.log = (input) => this.log(input, "INFO");
@@ -85,7 +85,7 @@ export default class InvalidBotter {
                         console.error(e.message);
                     }
                  }
-                }, 1000 / module.loopInterval);
+                }, module.loopInterval);
             }
         }
      //   this.themeManager.selectTheme("./src/themes/dark.json");
@@ -136,7 +136,7 @@ export default class InvalidBotter {
 
 
 
-    public getBotJSONObjectByName(name: string): any {
+    public getBotJSONObjectByName(name: string): IBot {
         for(let bot of this.bots) {
             if(bot.bot._client.username.toUpperCase() === name.toUpperCase() && bot.onServer) {
                 return bot;
@@ -156,16 +156,28 @@ export default class InvalidBotter {
     public botDelayIndex = -1;
 
 
-    public addBotWithDelay(options: BotOptions, sendMessage?: boolean) {
+    public addBotWithDelay(options: BotOptions, sendMessage?: boolean, callback?: Function) {
         if(!sendMessage) {
             sendMessage = false;
         }
         this.botDelayIndex++;
         setTimeout(() => {
             let bot = this.addBot(options);
-            if(sendMessage) this.log("Joined server {bold}" + options.host + ":" + options.port + "{/bold} with account: {bold}" + options.username + "{/bold}", "SUCCESS")
+            if(callback) {
+                callback(bot);
+            }
+            if(sendMessage) this.log("Joined server {bold}" + options.host + ":" + options.port + "{/bold} with account: {bold}" + options.username + "{/bold}", "SUCCESS");
             this.botDelayIndex--;
         }, this.getBotDelay())
+    }
+
+    public isOwner(name: string): boolean {
+        for(let owner of this.config.owners) {
+            if(owner.toUpperCase() === name.toUpperCase()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public getBotDelay() {
@@ -262,6 +274,16 @@ export default class InvalidBotter {
         return array;
     }
 
+    public getSelectedBotsAsIBot() : IBot[] {
+        let array: IBot[] = [];
+        for(let bot of this.bots) {
+            if(bot.onServer && bot.selected) {
+                array.push(bot);
+            }
+        }
+        return array;
+    }
+
     public addListenerToBot(bot: Bot, listenerType: any, func: Function, key?: string) {
         bot.on(listenerType, func);
         for(let botPart in this.bots) {
@@ -271,6 +293,24 @@ export default class InvalidBotter {
             }
         }
 
+    }
+
+    public getNearestPlayer(bot, canBeOwner?: boolean) {
+        let nearest = null;
+        for(let entity in bot.players) {
+            if(bot.players[entity] && bot.players[entity].entity && bot.players[entity].position) {
+            if(bot.players[entity].entity !== bot.entity && (canBeOwner || !this.isOwner(bot.players[entity].username))) {
+                if (!nearest) {
+                    nearest = bot.players[entity].entity;
+                } else {
+                    if (bot.players[entity].entity.position.distanceTo(bot.position) < nearest.position.distanceTo(bot.position)) {
+                        nearest = bot.players[entity].entity;
+                    }
+                }
+            }
+            }
+        }
+        return nearest;
     }
 
     public addOnceListenerToBot(bot: Bot, listenerType: any, func: Function, key?: string) {
@@ -289,7 +329,7 @@ export default class InvalidBotter {
         this.removeBotBoxByJSONObj(sliceBox);
     }
 
-    public removeBotBoxByJSONObj(bot: any) {
+    public removeBotBoxByJSONObj(bot: IBot) {
         this.removeBotBoxByBox(bot.box);
     }
 
