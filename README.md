@@ -1,5 +1,7 @@
 # InvalidBotter
 
+[My patreon account](https://patreon.com/sirlennox)
+
 The InvalidBotter is a **100% customizable minecraft botting tool** based on a Terminal GUI.
 
 
