@@ -30,6 +30,7 @@ const gui_1 = __importDefault(require("./gui/gui"));
 const ThemeManager_1 = __importDefault(require("./ThemeManager"));
 const blessed = __importStar(require("blessed"));
 const path = __importStar(require("path"));
+let pkg = require("../package.json");
 class InvalidBotter {
     //TODO ADD THEMES WITH COLORS ETC
     constructor() {
@@ -46,6 +47,20 @@ class InvalidBotter {
     }
     start() {
         this.gui.createGui();
+        if (this.gui.chatBox.width >= "               _____                 _ _     _ ____        _   _            ".length) {
+            this.writeInChatBox("{#B400FF-fg}               _____                 _ _     _ ____        _   _            \n" +
+                "              |_   _|               | (_)   | |  _ \\      | | | |           \n" +
+                "                | |  _ ____   ____ _| |_  __| | |_) | ___ | |_| |_ ___ _ __ \n" +
+                "                | | | '_ \\ \\ / / _` | | |/ _` |  _ < / _ \\| __| __/ _ \\ '__|\n" +
+                "               _| |_| | | \\ V / (_| | | | (_| | |_) | (_) | |_| ||  __/ |   \n" +
+                "              |_____|_| |_|\\_/ \\__,_|_|_|\\__,_|____/ \\___/ \\__|\\__\\___|_|   \n" +
+                "               by {bold}SirLennox{/bold}                              {/}{#FFFE00-fg}v" + pkg.version + "{/}");
+            this.writeInChatBox("\n\n");
+        }
+        else {
+            this.writeInChatBox("{#B400FF-fg}InvalidBotter  {/}{#FFFE00-fg}v" + pkg.version + "{/} {#0FFF00-fg}by {bold}SirLennox{/bold}{/}");
+            this.writeInChatBox("\n\n");
+        }
         console.log = (input) => this.log(input, "INFO");
         console.info = (input) => this.log(input, "INFO");
         console.error = (input) => this.log(input, "ERROR");
@@ -162,10 +177,24 @@ class InvalidBotter {
             selected: false,
             box: undefined
         });
-        this.addListenerToBot(bot, "spawn", () => {
+        this.addOnceListenerToBot(bot, "spawn", () => {
             for (let module of this.moduleLoader.modules) {
                 if (module.toggled) {
-                    module.onBotSpawn(bot, this);
+                    try {
+                        module.onBotSpawn(bot, this);
+                    }
+                    catch (e) {
+                        console.error("An unexpected error occurred while executing onBotSpawn of " + module.name + ".");
+                        console.error(e.message);
+                        module.toggled = false;
+                        try {
+                            module.onDisable(this);
+                        }
+                        catch (e) {
+                            console.error("An unexpected error occurred while disabling " + module.name + ".");
+                            console.error(e.message);
+                        }
+                    }
                 }
             }
             for (let b in this.bots) {
@@ -176,11 +205,25 @@ class InvalidBotter {
             }
             this.refreshBotBoxes();
         });
-        this.addListenerToBot(bot, "kicked", (reason, loggedIn) => {
+        this.addOnceListenerToBot(bot, "kicked", (reason, loggedIn) => {
             this.removeBot(bot);
             for (let module of this.moduleLoader.modules) {
                 if (module.toggled) {
-                    module.onBotKick(bot, this, reason, loggedIn);
+                    try {
+                        module.onBotKick(bot, this, reason, loggedIn);
+                    }
+                    catch (e) {
+                        console.error("An unexpected error occurred while executing onBotKick of " + module.name + ".");
+                        console.error(e.message);
+                        module.toggled = false;
+                        try {
+                            module.onDisable(this);
+                        }
+                        catch (e) {
+                            console.error("An unexpected error occurred while disabling " + module.name + ".");
+                            console.error(e.message);
+                        }
+                    }
                 }
             }
         });
@@ -213,6 +256,15 @@ class InvalidBotter {
     }
     addListenerToBot(bot, listenerType, func, key) {
         bot.on(listenerType, func);
+        for (let botPart in this.bots) {
+            if (this.bots[botPart].bot === bot) {
+                this.bots[botPart].listeners.push({ name: listenerType, func: func, key: key });
+                break;
+            }
+        }
+    }
+    addOnceListenerToBot(bot, listenerType, func, key) {
+        bot.once(listenerType, func);
         for (let botPart in this.bots) {
             if (this.bots[botPart].bot === bot) {
                 this.bots[botPart].listeners.push({ name: listenerType, func: func, key: key });

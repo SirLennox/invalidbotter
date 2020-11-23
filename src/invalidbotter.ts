@@ -10,6 +10,10 @@ import {type} from "os";
 import ThemeManager from "./ThemeManager";
 import * as blessed from "blessed";
 import * as path from "path";
+import IBot from "./IBot";
+
+let pkg = require("../package.json")
+
 export default class InvalidBotter {
 
 
@@ -19,7 +23,7 @@ export default class InvalidBotter {
     public commandLoader: CommandLoader;
     public moduleLoader: ModuleLoader
     public gui: Gui;
-    public bots: any[] = [];
+    public bots: IBot[] = [];
     public theme: any;
     public themeManager: ThemeManager;
     //TODO ADD THEMES WITH COLORS ETC
@@ -35,9 +39,23 @@ export default class InvalidBotter {
         this.moduleLoader = new ModuleLoader(this, path.join(__dirname, "/plugins/modules/"));
     }
 
+
     public start(): void {
 
         this.gui.createGui();
+        if(this.gui.chatBox.width >= "               _____                 _ _     _ ____        _   _            ".length) {
+            this.writeInChatBox("{#B400FF-fg}               _____                 _ _     _ ____        _   _            \n" +
+                "              |_   _|               | (_)   | |  _ \\      | | | |           \n" +
+                "                | |  _ ____   ____ _| |_  __| | |_) | ___ | |_| |_ ___ _ __ \n" +
+                "                | | | '_ \\ \\ / / _` | | |/ _` |  _ < / _ \\| __| __/ _ \\ '__|\n" +
+                "               _| |_| | | \\ V / (_| | | | (_| | |_) | (_) | |_| ||  __/ |   \n" +
+                "              |_____|_| |_|\\_/ \\__,_|_|_|\\__,_|____/ \\___/ \\__|\\__\\___|_|   \n" +
+                "               by {bold}SirLennox{/bold}                              {/}{#FFFE00-fg}v" + pkg.version + "{/}");
+            this.writeInChatBox("\n\n");
+        }else {
+            this.writeInChatBox("{#B400FF-fg}InvalidBotter  {/}{#FFFE00-fg}v" + pkg.version + "{/} {#0FFF00-fg}by {bold}SirLennox{/bold}{/}");
+            this.writeInChatBox("\n\n");
+        }
         console.log = (input) => this.log(input, "INFO");
         console.info = (input) => this.log(input, "INFO");
         console.error = (input) => this.log(input, "ERROR");
@@ -116,6 +134,8 @@ export default class InvalidBotter {
 
 
 
+
+
     public getBotJSONObjectByName(name: string): any {
         for(let bot of this.bots) {
             if(bot.bot._client.username.toUpperCase() === name.toUpperCase() && bot.onServer) {
@@ -164,10 +184,22 @@ export default class InvalidBotter {
             box: undefined
         })
 
-        this.addListenerToBot(bot, "spawn", () => {
+        this.addOnceListenerToBot(bot, "spawn", () => {
             for(let module of this.moduleLoader.modules) {
                 if(module.toggled) {
+                    try {
                     module.onBotSpawn(bot, this);
+                    } catch(e) {
+                        console.error("An unexpected error occurred while executing onBotSpawn of " + module.name + ".");
+                        console.error(e.message);
+                        module.toggled = false;
+                        try {
+                            module.onDisable(this);
+                        } catch(e) {
+                            console.error("An unexpected error occurred while disabling " + module.name + ".");
+                            console.error(e.message);
+                        }
+                    }
                 }
             }
             for(let b in this.bots) {
@@ -179,11 +211,23 @@ export default class InvalidBotter {
             this.refreshBotBoxes();
         });
 
-        this.addListenerToBot(bot, "kicked", (reason, loggedIn) => {
+        this.addOnceListenerToBot(bot, "kicked", (reason, loggedIn) => {
             this.removeBot(bot);
             for(let module of this.moduleLoader.modules) {
                 if(module.toggled) {
+                    try {
                     module.onBotKick(bot, this, reason, loggedIn);
+                    } catch(e) {
+                        console.error("An unexpected error occurred while executing onBotKick of " + module.name + ".");
+                        console.error(e.message);
+                        module.toggled = false;
+                        try {
+                            module.onDisable(this);
+                        } catch(e) {
+                            console.error("An unexpected error occurred while disabling " + module.name + ".");
+                            console.error(e.message);
+                        }
+                    }
                 }
             }
         })
@@ -220,6 +264,17 @@ export default class InvalidBotter {
 
     public addListenerToBot(bot: Bot, listenerType: any, func: Function, key?: string) {
         bot.on(listenerType, func);
+        for(let botPart in this.bots) {
+            if(this.bots[botPart].bot === bot) {
+                this.bots[botPart].listeners.push({name: listenerType, func: func, key: key});
+                break;
+            }
+        }
+
+    }
+
+    public addOnceListenerToBot(bot: Bot, listenerType: any, func: Function, key?: string) {
+        bot.once(listenerType, func);
         for(let botPart in this.bots) {
             if(this.bots[botPart].bot === bot) {
                 this.bots[botPart].listeners.push({name: listenerType, func: func, key: key});

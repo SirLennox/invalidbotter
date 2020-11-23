@@ -48,7 +48,10 @@ class CommandLoader {
         for (let file of files) {
             if (file.endsWith(".js")) {
                 let command = require(path.join(__dirname, "plugins", "commands", file));
-                this.commands.push(command[Object.keys(command)[0]]);
+                let keys = Object.keys(command);
+                for (let index = 0; index < keys.length; index++) {
+                    this.commands.push(command[keys[index]]);
+                }
             }
         }
     }

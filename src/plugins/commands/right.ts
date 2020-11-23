@@ -19,9 +19,9 @@ export const Right: Command = {
             bot.controlState.left = !moving;
         }
         if(moving) {
-            invalidbotter.log("Stopped moving left!", "SUCCESS");
+            invalidbotter.log("Stopped moving right!", "SUCCESS");
         }else {
-            invalidbotter.log("Started moving left!", "SUCCESS");
+            invalidbotter.log("Started moving right!", "SUCCESS");
         }
     }
 

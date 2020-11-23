@@ -24,7 +24,10 @@ class ModuleLoader {
         for (let file of files) {
             if (file.endsWith(".js")) {
                 let module = require(path_1.default.join(__dirname, "plugins", "modules", file));
-                this.modules.push(module[Object.keys(module)[0]]);
+                let keys = Object.keys(module);
+                for (let index = 0; index < keys.length; index++) {
+                    this.modules.push(module[keys[index]]);
+                }
             }
         }
     }

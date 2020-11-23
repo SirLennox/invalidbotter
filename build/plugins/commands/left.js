@@ -18,10 +18,10 @@ exports.Left = {
             bot.controlState.right = !moving;
         }
         if (moving) {
-            invalidbotter.log("Stopped moving right!", "SUCCESS");
+            invalidbotter.log("Stopped moving left!", "SUCCESS");
         }
         else {
-            invalidbotter.log("Started moving right!", "SUCCESS");
+            invalidbotter.log("Started moving left!", "SUCCESS");
         }
     }
 };
