@@ -5,7 +5,7 @@ exports.GuiLock = {
     author: "SirLennox",
     description: "Disable / Enable GUI drag",
     loop: undefined,
-    loopInterval: 100000000000,
+    loopInterval: -1,
     name: "GuiLock",
     toggled: false,
     version: "",

@@ -26,6 +26,7 @@ exports.Disconnect = {
                 let bot = invalidbotter.getBotByName(args[0]);
                 if (!bot) {
                     invalidbotter.log("Bot not found!", "ERROR");
+                    return;
                 }
                 invalidbotter.removeBot(bot);
                 invalidbotter.log("Successfully removed bot.", "SUCCESS");

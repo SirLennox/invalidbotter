@@ -17,7 +17,7 @@ export const ChatHandler: Module = {
     author: "SirLennox",
     description: "Post chat messages in console",
     loop: undefined,
-    loopInterval: 1000000000000,
+    loopInterval: -1,
     name: "ChatHandler",
     toggled: true,
     version: "1.0",

@@ -27,6 +27,7 @@ export const Toggle: Command = {
                     console.error("An unexpected error occurred while enabling " + module.name + ".");
                     console.error(e.message);
                 }
+		if(module.loopInterval > 0) {
                 module.loop = setInterval(() => {
                     try {
                     module.onUpdate(invalidbotter);
@@ -42,6 +43,7 @@ export const Toggle: Command = {
                         }
                     }
                 }, module.loopInterval);
+		}
 
             }else {
                 invalidbotter.log("{#FF0000-fg}Disabled{/} {bold}" + module.name + "{/bold}", "MODULE");

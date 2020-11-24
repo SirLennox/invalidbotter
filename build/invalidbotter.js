@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -77,23 +77,25 @@ class InvalidBotter {
                     console.error("An unexpected error occurred while enabling " + module.name + ".");
                     console.error(e.message);
                 }
-                module.loop = setInterval(() => {
-                    try {
-                        module.onUpdate(this);
-                    }
-                    catch (e) {
-                        console.error("An unexpected error occurred while updating " + module.name + ".");
-                        console.error(e.message);
-                        module.toggled = false;
+                if (module.loopInterval > 0) {
+                    module.loop = setInterval(() => {
                         try {
-                            module.onDisable(this);
+                            module.onUpdate(this);
                         }
                         catch (e) {
-                            console.error("An unexpected error occurred while disabling " + module.name + ".");
+                            console.error("An unexpected error occurred while updating " + module.name + ".");
                             console.error(e.message);
+                            module.toggled = false;
+                            try {
+                                module.onDisable(this);
+                            }
+                            catch (e) {
+                                console.error("An unexpected error occurred while disabling " + module.name + ".");
+                                console.error(e.message);
+                            }
                         }
-                    }
-                }, 1000 / module.loopInterval);
+                    }, module.loopInterval);
+                }
             }
         }
         //   this.themeManager.selectTheme("./src/themes/dark.json");

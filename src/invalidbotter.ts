@@ -71,6 +71,7 @@ export default class InvalidBotter {
                 console.error("An unexpected error occurred while enabling " + module.name + ".");
                 console.error(e.message);
             }
+		if(module.loopInterval > 0) {
                 module.loop = setInterval(() => {
                  try {
                     module.onUpdate(this);
@@ -86,6 +87,7 @@ export default class InvalidBotter {
                     }
                  }
                 }, module.loopInterval);
+		}
             }
         }
      //   this.themeManager.selectTheme("./src/themes/dark.json");
