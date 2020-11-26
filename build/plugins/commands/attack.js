@@ -32,7 +32,7 @@ exports.Attack = {
                 }
                 bot["pvp"].attack(bot.players[player].entity);
                 invalidbotter.log("Started attacking!", "SUCCESS", bot);
-                break;
+                
             }
             else {
                 invalidbotter.log("Player not found!", "ERROR", bot);
