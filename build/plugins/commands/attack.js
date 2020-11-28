@@ -23,7 +23,7 @@ exports.Attack = {
         }
         for (let bot of bots) {
             let player = args[0];
-            if (bot.players[player].username.toUpperCase() === args[0].toUpperCase()) {
+            if (bot.players[player].username.toUpperCase() === args[0].toUpperCase() && bot.players[player].entity !== bot.entity) {
                 if (!bot.hasPlugin(pathfinder)) {
                     bot.loadPlugin(pathfinder);
                 }
@@ -32,6 +32,9 @@ exports.Attack = {
                 }
                 bot["pvp"].attack(bot.players[player].entity);
                 invalidbotter.log("Started attacking!", "SUCCESS", bot);
+                bot["pvp"].once('stoppedAttacking', () => {
+                    invalidbotter.log("Stopped attacking " + player + "!", "SUCCESS", bot);
+                });
             }
             else {
                 invalidbotter.log("Player not found!", "ERROR", bot);

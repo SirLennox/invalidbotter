@@ -9,7 +9,7 @@ exports.FightBot = {
     author: "SirLennox",
     description: "Attack everyone with AI",
     loop: undefined,
-    loopInterval: 1000 / 10,
+    loopInterval: 1000,
     name: "FightBot",
     toggled: false,
     version: "",
@@ -23,15 +23,17 @@ exports.FightBot = {
     },
     onUpdate(botter) {
         for (let bot of botter.getBotsOnServer()) {
-            let nearest = botter.getNearestPlayer(bot);
-            if (nearest) {
-                if (!bot.hasPlugin(pathfinder)) {
-                    bot.loadPlugin(pathfinder);
+            if (!bot["pvp"] || !bot["pvp"].target) {
+                let nearest = botter.getNearestPlayer(bot);
+                if (nearest) {
+                    if (!bot.hasPlugin(pathfinder)) {
+                        bot.loadPlugin(pathfinder);
+                    }
+                    if (!bot.hasPlugin(mineflayerPvP)) {
+                        bot.loadPlugin(mineflayer_pvp_1.plugin);
+                    }
+                    bot["pvp"].attack(nearest);
                 }
-                if (!bot.hasPlugin(mineflayerPvP)) {
-                    bot.loadPlugin(mineflayer_pvp_1.plugin);
-                }
-                bot["pvp"].attack(nearest);
             }
         }
     }

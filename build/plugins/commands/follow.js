@@ -47,9 +47,9 @@ exports.Follow = {
     }
 };
 exports.ResetFollows = {
-    aliases: ["resetfollows", "stopfollow", "stopfollowing"],
+    aliases: ["resetfollow", "resetfollows", "stopfollow", "stopfollowing", "resetgoals", "stopattack", "stopfollow"],
     author: "SirLennox",
-    command: "resetfollows",
+    command: "resetgoals",
     description: "Reset the follows of all selected bots",
     version: "1.0",
     onCommand(args, invalidbotter) {
@@ -63,6 +63,6 @@ exports.ResetFollows = {
                 bot["pathfinder"].setGoal(undefined);
             }
         }
-        invalidbotter.log("Successfully stopped following!", "SUCCESS");
+        invalidbotter.log("Successfully resetted all goals of selected bots!", "SUCCESS");
     }
 };

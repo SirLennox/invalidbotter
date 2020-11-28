@@ -43,6 +43,9 @@ exports.Toggle = {
                                 console.error("An unexpected error occurred while disabling " + module.name + ".");
                                 console.error(e.message);
                             }
+                            if (module.loop) {
+                                timers_1.clearInterval(module.loop);
+                            }
                         }
                     }, module.loopInterval);
                 }

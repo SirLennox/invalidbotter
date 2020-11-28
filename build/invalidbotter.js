@@ -93,6 +93,9 @@ class InvalidBotter {
                                 console.error("An unexpected error occurred while disabling " + module.name + ".");
                                 console.error(e.message);
                             }
+                            if (module.loop) {
+                                clearInterval(module.loop);
+                            }
                         }
                     }, module.loopInterval);
                 }
@@ -285,11 +288,16 @@ class InvalidBotter {
             }
         }
     }
+    getPlayerListOfSelectedBots() {
+        let playerList = [];
+        this.getSelectedBots().forEach((value) => Object.keys(value.players).forEach((value1 => playerList.push(value1))));
+        return playerList;
+    }
     getNearestPlayer(bot, canBeOwner) {
         let nearest = null;
         for (let entity in bot.players) {
             if (bot.players[entity] && bot.players[entity].entity && bot.players[entity].position) {
-                if (bot.players[entity].entity !== bot.entity && (canBeOwner || !this.isOwner(bot.players[entity].username))) {
+                if (bot.players[entity].entity !== bot.entity && (canBeOwner || !this.isOwner(bot.players[entity].username)) && !this.getBotByName(bot.players[entity].username)) {
                     if (!nearest) {
                         nearest = bot.players[entity].entity;
                     }

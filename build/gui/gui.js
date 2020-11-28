@@ -103,7 +103,8 @@ class Gui {
             },
             inputOnFocus: true,
             focusable: true,
-            draggable: true
+            draggable: true,
+            input: true
         });
         this.chatBox = blessed.box({
             top: this.chatBoxTop,
@@ -120,6 +121,8 @@ class Gui {
             draggable: true,
             mouse: true
         });
+        this.tabText = undefined;
+        this.tabCount = 0;
         this.invalidbotter = invalidbotter;
     }
     createGui() {
@@ -183,6 +186,59 @@ class Gui {
                 this.renderScreen();
             }
         });
+        /*this.inputBox.key('tab', () => {
+            let text = this.inputBox.getValue().replace('\t', '');
+            let isCommand = !text.includes(" ");
+            if(this.tabText === text) {
+                let commands = [];
+                for (let command of this.invalidbotter.commandLoader.commands) {
+                    if (command.command.toUpperCase().startsWith(text.toUpperCase())) {
+                        commands.push(command.command);
+                    } else {
+                        for (let alias of command.aliases) {
+                            if (alias.toUpperCase().startsWith(text.toUpperCase())) {
+                                commands.push(command.command);
+                            }
+                        }
+                    }
+                }
+
+                this.invalidbotter.writeInChatBox("" + commands.length);
+                if(commands.length > this.tabCount) {
+                    this.tabCount++;
+                    this.invalidbotter.writeInChatBox("Tabbing...");
+                    text = commands[this.tabCount];
+                }else {
+                    this.invalidbotter.writeInChatBox("Set to 0...");
+                    this.tabCount = 0;
+                }
+            }else {
+                this.tabText = undefined;
+                if (isCommand) {
+                    for (let command of this.invalidbotter.commandLoader.commands) {
+                        if (command.command.toUpperCase().startsWith(text.toUpperCase())) {
+                            text = command.command;
+                            this.tabText = text;
+                            this.tabCount = 0;
+                            break;
+                        } else {
+                            for (let alias of command.aliases) {
+                                if (alias.toUpperCase().startsWith(text.toUpperCase())) {
+                                    text = command.command;
+                                    this.tabText = text;
+                                    this.tabCount = 0;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            this.inputBox.setValue(text.replace("\t", ""));
+            this.renderScreen();
+        });
+
+    */ 
     }
     /*public refreshPlayerList() {
         this.playerListBox = this.createPlayerListBox();

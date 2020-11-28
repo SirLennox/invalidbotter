@@ -1,6 +1,6 @@
 {
   "name": "invalidbotter",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A minecraft botter",
   "main": "build/main.js",
   "scripts": {

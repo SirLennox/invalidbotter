@@ -8,42 +8,20 @@ exports.Sprint = {
     description: "sprint",
     version: "1.0",
     onCommand(args, invalidbotter) {
-        if (args.length == 1) {
-            if (args[0].toUpperCase() === "*") {
-                let onlineBots = invalidbotter.getBotsOnServer();
-                if (onlineBots.length <= 0) {
-                    invalidbotter.log("No bots are online.", "ERROR");
-                    return;
-                }
-                let moving = onlineBots[0].controlState.sprint;
-                for (let bot of onlineBots) {
-                    bot.controlState.sprint = !moving;
-                }
-                if (moving) {
-                    invalidbotter.log("Started sprinting!", "SUCCESS");
-                }
-                else {
-                    invalidbotter.log("Started sprinting!", "SUCCESS");
-                }
-            }
-            else {
-                let bot = invalidbotter.getBotByName(args[0]);
-                if (!bot) {
-                    console.log("Bot not found!", "ERROR");
-                    return;
-                }
-                let moving = bot.controlState.sprint;
-                bot.controlState.sprint = !moving;
-                if (moving) {
-                    invalidbotter.log("Started sprinting!", "SUCCESS", bot);
-                }
-                else {
-                    invalidbotter.log("Started sprinting!", "SUCCESS", bot);
-                }
-            }
+        let bots = invalidbotter.getSelectedBots();
+        if (bots.length < 1) {
+            console.log("No bots selected!", "ERROR");
+            return;
+        }
+        let moving = bots[0].controlState.sprint;
+        for (let bot of bots) {
+            bot.controlState.sprint = !moving;
+        }
+        if (moving) {
+            invalidbotter.log("Stopped sprinting!", "SUCCESS");
         }
         else {
-            invalidbotter.sendUsage("fw <Name/*>");
+            invalidbotter.log("Started sprinting!", "SUCCESS");
         }
     }
 };
