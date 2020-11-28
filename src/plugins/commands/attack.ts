@@ -36,10 +36,6 @@ export const Attack: Command = {
                 }
                 bot["pvp"].attack(bot.players[player].entity);
                 invalidbotter.log("Started attacking!", "SUCCESS", bot);
-<<<<<<< HEAD
-=======
-                
->>>>>>> b0ebb382ef03df1f732467393811af6025dc7d07
             } else {
             invalidbotter.log("Player not found!", "ERROR", bot);
         }
